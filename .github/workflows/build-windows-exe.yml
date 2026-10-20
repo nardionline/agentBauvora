@@ -1,0 +1,23 @@
+name: Build BAUMARKET VORA EXE
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'windows-bridge/**'
+      - '.github/workflows/build-windows-exe.yml'
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Publish self-contained Windows EXE
+        shell: pwsh
+        run: dotnet publish windows-bridge/BauVoraStockBridge.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BauVoraStockBridge-win-x64
+          path: windows-bridge/bin/Release/net8.0/win-x64/publish/

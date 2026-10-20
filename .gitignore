@@ -1,0 +1,4 @@
+**/bin/
+**/obj/
+windows-bridge/appsettings.json
+**/logs/
